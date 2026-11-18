@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { authRouter } from "./modules/auth/auth.route.js";
 
 export const app: Application = express();
 
@@ -13,6 +14,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Parse Cookie header and populate req.cookies
 app.use(cookieParser());
+
+// Mount application module routes
+app.use("/auth", authRouter);
 
 // Base health check route
 app.get("/", (req: Request, res: Response) => {

@@ -1,5 +1,12 @@
 node_modules/
 dist/
-.env
 *.log
 .DS_Store
+config.bat
+
+.env
+.env.*
+.env.local
+.env.production
+.vscode/
+*.orc
