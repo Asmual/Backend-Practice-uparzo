@@ -1,9 +1,9 @@
+import { ApiError } from "../../utils/ApiError.js";
 import { ILoginPayload, IUserResponse } from "./auth.types.js";
 
-// Mock user store for demonstration
 const mockUser = {
   id: "usr_101",
-  name: "Refat",
+  name: "refat",
   email: "refat@gmail.com",
   password: "1234",
 };
@@ -12,11 +12,11 @@ const login = (payload: ILoginPayload): IUserResponse => {
   const { email, password } = payload;
 
   if (mockUser.email !== email) {
-    throw new Error("User not found with this email");
+    throw new ApiError(404, "User not found");
   }
 
   if (mockUser.password !== password) {
-    throw new Error("Invalid credentials provided");
+    throw new ApiError(401, "Wrong Pass");
   }
 
   return {

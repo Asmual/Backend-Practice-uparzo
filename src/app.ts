@@ -1,7 +1,9 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { authRouter } from "./modules/auth/auth.route.js";
+import routes from "./routes/routes.js";
+import { notFound } from "./middleware/notFound.js";
+import { globalError } from "./middleware/globalErrorHandler.js";
 
 export const app: Application = express();
 
@@ -15,25 +17,19 @@ app.use(express.urlencoded({ extended: true }));
 // Parse Cookie header and populate req.cookies
 app.use(cookieParser());
 
-// Mount application module routes
-app.use("/auth", authRouter);
+// Mount application module routes under /api/v1
+app.use("/api/v1", routes);
 
 // Base health check route
 app.get("/", (req: Request, res: Response) => {
-  res.status(200).json({
+  res.send({
     success: true,
-    message: "Server is running smoothly",
+    message: "Server is running on port 5000",
   });
 });
 
-// Fallback 404 Not Found route handler
-app.use((req: Request, res: Response) => {
-  res.status(404).json({
-    success: false,
-    message: "Route Not Found",
-    error: {
-      path: req.originalUrl,
-      message: "The requested path was not found on this server.",
-    },
-  });
-});
+// Fallback 404 Not Found handler
+app.use(notFound);
+
+// Centralized Global Error Handler
+app.use(globalError);

@@ -5,8 +5,8 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx --watch src/server.ts",
-    "build": "tsc"
+    "dev": "node init && tsx --watch src/server.ts",
+    "build": "node init && tsc"
   },
   "keywords": [],
   "author": "",

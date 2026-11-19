@@ -4,11 +4,6 @@ dist/
 .DS_Store
 config.bat
 
-.env
-.env.*
-.env.local
-.env.production
-.vscode/
 *.orc
 !.env.example
 !.env.sample
