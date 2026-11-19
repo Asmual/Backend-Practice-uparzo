@@ -10,3 +10,8 @@ config.bat
 .env.production
 .vscode/
 *.orc
+!.env.example
+!.env.sample
+.envrc
+.venv/
+venv/
