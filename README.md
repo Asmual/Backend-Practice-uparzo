@@ -137,7 +137,8 @@ Ensure `.env` contains:
 ```env
 PORT=5000
 NODE_ENVIRONMENT=development
-DATABASE_URL=postgresql://USER:PASSWORD@localhost:5432/DATABASE_NAME?schema=public
+# Neon Cloud PostgreSQL Connection
+DATABASE_URL=postgresql://neondb_owner:password@ep-your-endpoint-pooler.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
 ```
 
 ---
