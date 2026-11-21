@@ -1,5 +1,8 @@
+import bcrypt from "bcrypt";
+import { StatusCodes } from "http-status-codes";
+import { prisma } from "../../config/prisma.config.js";
 import { ApiError } from "../../utils/ApiError.js";
-import { ILoginPayload, IUserResponse } from "./auth.types.js";
+import { ILoginPayload, IRegisterUser, IUserResponse } from "./auth.types.js";
 
 const mockUser = {
   id: "usr_101",
@@ -26,6 +29,32 @@ const login = (payload: ILoginPayload): IUserResponse => {
   };
 };
 
+const registerUser = async (payload: IRegisterUser) => {
+  const isExistUser = await prisma.user.findUnique({
+    where: { email: payload.email },
+  });
+
+  if (isExistUser) {
+    throw new ApiError(StatusCodes.CONFLICT, "User already exist");
+  }
+
+  const hashedPassword = await bcrypt.hash(payload.password, 10);
+
+  const newUser = await prisma.user.create({
+    data: {
+      name: payload.name,
+      email: payload.email,
+      password: hashedPassword,
+    },
+    omit: {
+      password: true,
+    },
+  });
+
+  return newUser;
+};
+
 export const authService = {
   login,
+  registerUser,
 };
