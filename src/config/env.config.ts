@@ -7,5 +7,6 @@ dotenv.config({
 
 export const env = {
   port: Number(process.env.PORT) || 5000,
-  node_environment: process.env.NODE_ENVIRONMENT || "development",
+  node_environment: (process.env.NODE_ENVIRONMENT as string) || "development",
+  database_url: (process.env.DATABASE_URL as string) || "",
 };
