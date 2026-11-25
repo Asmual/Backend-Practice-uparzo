@@ -17,6 +17,12 @@ export const env = {
   r2_bucketName: (process.env.R2_BUCKET_NAME as string) || "",
   r2_publicUrl: (process.env.R2_PUBLIC_URL as string) || "",
 
+  // Cloudinary Configuration
+  cloudinary_cloud_name: (process.env.CLOUDINARY_CLOUD_NAME as string) || "",
+  cloudinary_api_key: (process.env.CLOUDINARY_API_KEY as string) || "",
+  cloudinary_api_secret: (process.env.CLOUDINARY_API_SECRET as string) || "",
+  cloudinary_url: (process.env.CLOUDINARY_URL as string) || "",
+
   // SMTP Email configuration
   smtp_host: (process.env.SMTP_HOST as string) || "",
   smtp_port: Number(process.env.SMTP_PORT) || 587,
