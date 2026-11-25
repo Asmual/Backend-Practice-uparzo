@@ -4,6 +4,8 @@ import { prisma } from "../../config/prisma.config.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { ILoginPayload, IRegisterUser, IUserResponse } from "./auth.types.js";
 import { uploadImage } from "../../utils/imgeUpload.js";
+import { sendEmail } from "../../utils/email/sendEmail.js";
+import { welcomeEmailTemplate } from "../../utils/email/emailTemplates.js";
 
 const mockUser = {
   id: "usr_101",
@@ -34,8 +36,12 @@ const registerUser = async (payload: IRegisterUser, avatarBuffer?: Buffer) => {
   let avatarUrl: string | null = null;
 
   if (avatarBuffer) {
-    const uploaded = await uploadImage(avatarBuffer, { folder: "avatar" });
-    avatarUrl = uploaded.url;
+    try {
+      const uploaded = await uploadImage(avatarBuffer, { folder: "avatar" });
+      avatarUrl = uploaded.url;
+    } catch (uploadError) {
+      console.error("Avatar upload failed:", uploadError);
+    }
   }
 
   const isExistUser = await prisma.user.findUnique({
@@ -59,6 +65,18 @@ const registerUser = async (payload: IRegisterUser, avatarBuffer?: Buffer) => {
       password: true,
     },
   });
+
+  // Send automated welcome email in background
+  try {
+    await sendEmail({
+      to: newUser.email,
+      subject: "Welcome to Rise Together",
+      html: welcomeEmailTemplate(newUser.name),
+    });
+    console.log("Welcome email sent successfully to", newUser.email);
+  } catch (emailError) {
+    console.error("Welcome email failed to send:", emailError);
+  }
 
   return newUser;
 };
