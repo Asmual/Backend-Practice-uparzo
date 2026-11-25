@@ -10,7 +10,8 @@ const login = catchAsync((req: Request, res: Response) => {
 });
 
 const registerUser = catchAsync(async (req: Request, res: Response) => {
-  const result = await authService.registerUser(req.body);
+  const avatarBuffer = req.file?.buffer;
+  const result = await authService.registerUser(req.body, avatarBuffer);
   ApiResponse.success(res, result, "Register successful");
 });
 

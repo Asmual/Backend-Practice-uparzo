@@ -1,5 +1,7 @@
 allowBuilds:
+  '@aws-sdk/client-s3': true
   '@prisma/engines': true
   bcrypt: true
   esbuild: true
   prisma: true
+  sharp: true

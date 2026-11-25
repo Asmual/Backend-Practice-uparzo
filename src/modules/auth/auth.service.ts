@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { prisma } from "../../config/prisma.config.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { ILoginPayload, IRegisterUser, IUserResponse } from "./auth.types.js";
+import { uploadImage } from "../../utils/imgeUpload.js";
 
 const mockUser = {
   id: "usr_101",
@@ -29,7 +30,14 @@ const login = (payload: ILoginPayload): IUserResponse => {
   };
 };
 
-const registerUser = async (payload: IRegisterUser) => {
+const registerUser = async (payload: IRegisterUser, avatarBuffer?: Buffer) => {
+  let avatarUrl: string | null = null;
+
+  if (avatarBuffer) {
+    const uploaded = await uploadImage(avatarBuffer, { folder: "avatar" });
+    avatarUrl = uploaded.url;
+  }
+
   const isExistUser = await prisma.user.findUnique({
     where: { email: payload.email },
   });
@@ -45,6 +53,7 @@ const registerUser = async (payload: IRegisterUser) => {
       name: payload.name,
       email: payload.email,
       password: hashedPassword,
+      avatar: avatarUrl,
     },
     omit: {
       password: true,
